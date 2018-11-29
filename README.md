@@ -1,7 +1,50 @@
 ember-cp-buffered-validations
 ==============================================================================
 
-[Short description of the addon.]
+So far, using ember-cp-validations require to inject validations in the to-be-validated object.
+This may be useful, but when working with DS.Model, it imposes a single validation abstraction.
+
+This addon proposes to:
+* decouple the validator from the "validatee"
+* Applies changes to a proxy object that will carry the validation model
+* Keep using ember-cp-validations
+
+```js
+export default DS.Model.extend(buildValidations(...), {
+  // ...
+})
+
+//
+// what we currently have
+//
+let model = this.store.findRecord('my-type', myId);
+console.log(model.isValid)
+
+// or
+
+export default Component.extend({
+  model: null // will be given at runtime
+  isEverythingOk: reads('model.isValid')
+})
+
+//
+// What we want
+//
+
+function doYourMagic() {
+  this === ?
+}
+
+let ThingValidations = buildValidations(...)
+
+export default Component.extend({
+  model: null // will be given at runtime
+  validatedModel2: computed('thingTobeValidated', function () {
+    return doYourMagic(this, 'thingTobeValidated', ThingValidations) // <== a proxy with validations
+  })
+})
+
+```
 
 Installation
 ------------------------------------------------------------------------------
